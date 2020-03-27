@@ -1,0 +1,2 @@
+# liseur
+Native miniflux client
