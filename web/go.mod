@@ -1,4 +1,4 @@
-module miniflux-reader
+module liseur
 
 go 1.24.0
 

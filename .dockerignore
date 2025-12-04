@@ -19,7 +19,7 @@ go.work
 go.work.sum
 
 # Build artifacts
-miniflux-reader
+liseur
 
 # IDE
 .idea

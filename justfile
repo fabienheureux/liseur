@@ -11,7 +11,7 @@ web:
 
 # Build the web app binary
 build-web:
-    cd web && go build -o miniflux-reader main.go
+    cd web && go build -o liseur main.go
 
 # Install web dependencies
 deps-web:
@@ -23,19 +23,19 @@ dev-web:
 
 # Build Docker image
 docker-build:
-    docker build -t miniflux-reader ./web
+    docker build -t liseur ./web
 
 # Run Docker container
 docker-run:
-    docker run -d -p 5601:5601 --env-file web/.env --name miniflux-reader miniflux-reader
+    docker run -d -p 5601:5601 --env-file web/.env --name liseur liseur
 
 # Stop Docker container
 docker-stop:
-    docker stop miniflux-reader && docker rm miniflux-reader
+    docker stop liseur && docker rm liseur
 
 # Clean build artifacts
 clean:
-    rm -f web/miniflux-reader
+    rm -f web/liseur
     rm -f web/.env
 
 # Setup environment file from example

@@ -13,7 +13,7 @@ RUN go mod download
 COPY main.go ./
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o miniflux-reader .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o liseur .
 
 # Final stage
 FROM alpine:latest
@@ -23,7 +23,7 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /app
 
 # Copy binary from builder
-COPY --from=builder /app/miniflux-reader .
+COPY --from=builder /app/liseur .
 
 # Copy templates and static files
 COPY templates ./templates
@@ -36,4 +36,4 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Run the application
-CMD ["./miniflux-reader"]
+CMD ["./liseur"]

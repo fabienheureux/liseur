@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Miniflux Reader</title>
     <link rel="stylesheet" href="/static/styles.css">
+    <script type="module" src="/static/turbo.es2017-esm.js"></script>
     <script src="/static/app.js" defer></script>
     <style>
         :root {
@@ -66,6 +67,8 @@
                     {{range .Entries}}
                     <li>
                         <a href="/entry/{{.ID}}{{if $.SelectedFeed}}?feed={{$.SelectedFeed}}{{else if $.SelectedCat}}?category={{$.SelectedCat}}{{end}}" 
+                           data-turbo-frame="entry-content"
+                           data-turbo-preload
                            {{if and $.SelectedEntry (eq .ID $.SelectedEntry.ID)}}class="active"{{end}}>
                             <h3>{{.Title}}</h3>
                             <div class="entry-meta">

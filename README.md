@@ -1,4 +1,4 @@
-# Miniflux Reader
+# Liseur, a Miniflux reader
 
 A minimal RSS reader client for Miniflux with server-side rendering.
 
@@ -25,7 +25,7 @@ docker run -d \
   -e MINIFLUX_API_URL=https://your-miniflux-instance.com \
   -e MINIFLUX_API_KEY=your-api-key-here \
   -e PORT=8080 \
-  ghcr.io/YOUR_USERNAME/miniflux-reader:main
+  ghcr.io/fabienheureux/liseur:main
 ```
 
 **Note:** The PORT environment variable sets the internal port the app listens on. The `-p` flag maps the host port to the container port (format: `host:container`).
@@ -36,8 +36,8 @@ Or using docker-compose:
 version: '3.8'
 
 services:
-  miniflux-reader:
-    image: ghcr.io/YOUR_USERNAME/miniflux-reader:main
+  liseur:
+    image: ghcr.io/fabienheureux/liseur:main
     ports:
       - "8080:8080"
     environment:
@@ -136,7 +136,7 @@ just --list       # Show all available commands
 ## Project Structure
 
 ```
-miniflux-reader/
+liseur/
 ├── web/                 # Web application
 │   ├── main.go          # Go server with Miniflux client integration
 │   ├── go.mod           # Go module definition
@@ -166,14 +166,14 @@ The application uses:
 ### Build Docker Image Locally
 
 ```bash
-docker build -t miniflux-reader .
+docker build -t liseur .
 ```
 
 ### Build Binary
 
 ```bash
 cd web
-go build -o miniflux-reader main.go
+go build -o liseur main.go
 ```
 
 Or with just:
@@ -185,7 +185,7 @@ just build-web
 Then run with:
 
 ```bash
-./web/miniflux-reader
+./web/liseur
 ```
 
 ## CI/CD
@@ -197,7 +197,7 @@ The project includes a GitHub Actions workflow that automatically:
 
 To use the automated builds:
 1. Push to your GitHub repository
-2. The image will be available at `ghcr.io/YOUR_USERNAME/miniflux-reader:main`
+2. The image will be available at `ghcr.io/fabienheureux/liseur:main`
 3. Create a tag like `v1.0.0` to publish versioned images
 
 ## Environment Variables
