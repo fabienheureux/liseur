@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miniflux Reader</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/app.js" defer></script>
+    <style>
+        :root {
+            --density: {{.Density}};
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <!-- First column: Categories and Feeds sidebar -->
+        <aside id="categories-sidebar" aria-label="Categories and Feeds">
+            <header>
+                <h1>{{.ActiveTitle}}</h1>
+                <nav>
+                    <a href="/">All Items</a>
+                </nav>
+            </header>
+
+            <div class="density-control">
+                <label for="density-selector">Density:</label>
+                <select id="density-selector">
+                    <option value="0.75" {{if eq .Density "0.75"}}selected{{end}}>Compact</option>
+                    <option value="1" {{if eq .Density "1"}}selected{{end}}>Normal</option>
+                    <option value="1.5" {{if eq .Density "1.5"}}selected{{end}}>Comfortable</option>
+                </select>
+            </div>
+
+            <h2>Feeds</h2>
+            <nav id="categories-list">
+                {{range $category := .Categories}}
+                <details {{if index $.OpenCategories $category.ID}}open{{end}}>
+                    <summary>
+                        <a href="?category={{$category.ID}}">{{$category.Title}}</a>
+                    </summary>
+                    <ul>
+                        {{range $.Feeds}}
+                            {{if eq .Category.ID $category.ID}}
+                            <li>
+                                <a href="?feed={{.ID}}" {{if eq .ID $.SelectedFeed}}class="active"{{end}}>
+                                    {{.Title}}
+                                </a>
+                            </li>
+                            {{end}}
+                        {{end}}
+                    </ul>
+                </details>
+                {{end}}
+            </nav>
+        </aside>
+
+        <!-- Second column: Unread entries list -->
+        <section id="entries-list" aria-label="Unread Entries">
+            <header>
+                <h2>Unread Entries</h2>
+                <span class="count">({{.EntriesCount}})</span>
+            </header>
+            <ul id="entries">
+                {{if .Entries}}
+                    {{range .Entries}}
+                    <li>
+                        <a href="/entry/{{.ID}}{{if $.SelectedFeed}}?feed={{$.SelectedFeed}}{{else if $.SelectedCat}}?category={{$.SelectedCat}}{{end}}" 
+                           {{if and $.SelectedEntry (eq .ID $.SelectedEntry.ID)}}class="active"{{end}}>
+                            <h3>{{.Title}}</h3>
+                            <div class="entry-meta">
+                                <span class="entry-feed">{{.Feed.Title}}</span>
+                                <time datetime="{{.Date}}">{{formatDate .Date}}</time>
+                            </div>
+                        </a>
+                    </li>
+                    {{end}}
+                {{else}}
+                    <li class="loading">No unread entries</li>
+                {{end}}
+            </ul>
+        </section>
+
+        <!-- Third column: Entry content (hidden by default) -->
+        {{if .SelectedEntry}}
+        <article id="entry-content" aria-label="Entry Content">
+            <header>
+                <h2 id="entry-title">{{.SelectedEntry.Title}}</h2>
+                <div id="entry-meta">
+                    {{if .SelectedEntry.Author}}
+                    <span id="entry-author">{{.SelectedEntry.Author}}</span>
+                    {{end}}
+                    <time datetime="{{.SelectedEntry.Date}}">{{formatDate .SelectedEntry.Date}}</time>
+                    <a href="?feed={{.SelectedEntry.Feed.ID}}">{{.SelectedEntry.Feed.Title}}</a>
+                </div>
+                <div id="entry-actions">
+                    <a href="{{.SelectedEntry.URL}}" target="_blank" rel="noopener noreferrer">Open Original</a>
+                    <form method="POST" action="/mark-read/{{.SelectedEntry.ID}}{{if $.SelectedFeed}}?feed={{$.SelectedFeed}}{{else if $.SelectedCat}}?category={{$.SelectedCat}}{{end}}" style="display: inline;">
+                        <button type="submit">Mark as Read</button>
+                    </form>
+                    <a href="{{if $.SelectedFeed}}?feed={{$.SelectedFeed}}{{else if $.SelectedCat}}?category={{$.SelectedCat}}{{else}}/{{end}}" class="close-button" aria-label="Close entry">×</a>
+                </div>
+            </header>
+            <div id="entry-body">
+                {{.SelectedEntry.Content | safeHTML}}
+            </div>
+        </article>
+        {{end}}
+    </main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+go.work.sum
+
+# Build artifacts
+miniflux-reader
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+
+# Future app directories (not needed for web build)
+ios/
+android/
+
+# Old JavaScript files (not needed for Go app)
+web/app.js
+web/miniflux-api.js
+web/index.html
